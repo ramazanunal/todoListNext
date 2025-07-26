@@ -1,29 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
+import { collection, getDocs, addDoc,onSnapshot,doc, deleteDoc  } from "firebase/firestore";
+import { db } from "@/firestore";
 
 export default function Home() {
-  const [todos, setTodos] = useState<string[]>([]);
+  const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
-  const addTodo = () => {
+ useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'todo'), (snapshot) => {
+      const items = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      console.log("items",items);
+      
+      setTodos(items);
+    });
+
+    // Component unmount olduğunda dinlemeyi kapat
+    return () => unsubscribe();
+  }, []);
+
+  const addTodo = async () => {
     if (!input.trim()) return;
-    setTodos([...todos, input.trim()]);
+    await addDoc(collection(db,"todo"), {
+      todo:input,
+    });
     setInput("");
   };
 
-  const removeTodo = (index: number) => {
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
+  const removeTodo = async(id: number) => {
+    await deleteDoc(doc(db, "todo", id));
   };
+  // todo add firebase
 
   return (
-    <main className="min-h-screen bg-gray-100 p-4 flex flex-col items-center">
+    <main className="min-h-screen bg-gray-100 p-4 md:py-10 flex flex-col border items-center">
       <h1 className="text-2xl font-bold mb-4">📋 Todo List</h1>
 
-      <div className="flex gap-2 mb-4">
+      <div className="border flex gap-2 mb-4">
         <input
+          maxLength={100}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Yapılacak iş..."
@@ -41,11 +61,11 @@ export default function Home() {
         {todos.map((todo, i) => (
           <li
             key={i}
-            className="flex justify-between items-center bg-white p-2 rounded shadow"
+            className="flex justify-between items-center bg-white p-2 rounded shadow hover:shadow-xl transition-shadow ease-in"
           >
-            <span>{todo}</span>
+            <span>{todo.todo}</span>
             <button
-              onClick={() => removeTodo(i)}
+              onClick={() => removeTodo(todo.id)}
               className="text-red-500 hover:underline"
             >
               Sil
