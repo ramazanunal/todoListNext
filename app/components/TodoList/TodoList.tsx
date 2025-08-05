@@ -17,20 +17,23 @@ export default function TodoList() {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "todo"), (snapshot) => {
-      const items = snapshot.docs.map((doc) => ({
+  const unsubscribe = onSnapshot(collection(db, "todo"), (snapshot) => {
+    const items: Todo[] = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
         id: doc.id,
-        todo: doc.todo,
-        status: doc.status,
-      }));
-      console.log("items", items);
-
-      setTodos(items);
+        todo: data.todo as string,
+        status: data.status as boolean,
+      };
     });
 
-    // Component unmount olduğunda dinlemeyi kapat
-    return () => unsubscribe();
-  }, []);
+    console.log("items", items);
+    setTodos(items);
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   const addTodo = async () => {
     if (!input.trim()) return;
