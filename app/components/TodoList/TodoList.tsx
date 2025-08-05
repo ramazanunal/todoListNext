@@ -20,8 +20,8 @@ export default function TodoList() {
     const unsubscribe = onSnapshot(collection(db, "todo"), (snapshot) => {
       const items = snapshot.docs.map((doc) => ({
         id: doc.id,
-        todo: doc.todo as string,
-        status: doc.status as boolean,
+        todo: doc.todo,
+        status: doc.status,
       }));
       console.log("items", items);
 
@@ -81,7 +81,7 @@ export default function TodoList() {
           )}
 
           {todos.length > 0 && (
-            <div>
+            <div className="">
               <div>
                 <h2 className="text-xl font-semibold mb-2">Görevler</h2>
                 <hr className="py-2 text-gray-400" />
@@ -100,7 +100,7 @@ export default function TodoList() {
                 </ul>
               </div>
 
-              <div>
+              <div className="mt-5">
                 <h2 className="text-xl font-semibold mb-2">Tamamlananlar</h2>
                 <hr className="py-2 text-gray-400" />
                 <ul className="space-y-2">
