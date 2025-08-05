@@ -44,7 +44,7 @@ export default function TodoList() {
     setInput("");
   };
 
-  const removeTodo = async (id: number) => {
+  const removeTodo = async (id: string) => {
     await deleteDoc(doc(db, "todo", id));
   };
   // todo add firebase
