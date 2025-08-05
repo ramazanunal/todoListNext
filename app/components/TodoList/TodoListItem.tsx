@@ -4,7 +4,16 @@ import {
   PiTrashSimpleBold,
   PiCheckCircleFill,
 } from "react-icons/pi";
-export default function TodoListItem({todo, i, toggleStatus, removeTodo}) {
+import { Todo } from "../../Types";
+
+type Props = {
+  todo: Todo;
+  i: number;
+  toggleStatus: (id: string, status: boolean) => void;
+  removeTodo: (id: string) => void;
+};
+
+export default function TodoListItem({ todo, i, toggleStatus, removeTodo }: Props) {
   
   if (!todo.status) {
     return (
