@@ -20,7 +20,8 @@ export default function TodoList() {
     const unsubscribe = onSnapshot(collection(db, "todo"), (snapshot) => {
       const items = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data(),
+        todo: data.todo as string,
+        status: data.status as boolean,
       }));
       console.log("items", items);
 
