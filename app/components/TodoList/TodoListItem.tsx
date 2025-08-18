@@ -5,19 +5,19 @@ import {
   PiTrashSimpleBold,
   PiCheckCircleFill,
 } from "react-icons/pi";
-import { Todo } from "../../Types";
+import {TodoItem} from  "../../Types";
 import { useEffect, useState } from "react";
 
 type Props = {
-  todo: Todo;
-  i: number;
+  todo: TodoItem;
+  index: number;
   toggleStatus: (id: string, status: boolean) => void;
   removeTodo: (id: string) => void;
 };
 
 export default function TodoListItem({
   todo,
-  i,
+  index,
   toggleStatus,
   removeTodo,
 }: Props) {
@@ -66,7 +66,7 @@ export default function TodoListItem({
 
   return (
     <li
-      key={i}
+      key={index}
       className={`${baseClasses} ${animationClasses} ${
         todo.status
           ? "bg-green-100 line-through text-green-500"
