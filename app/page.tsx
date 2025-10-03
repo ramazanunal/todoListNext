@@ -4,13 +4,13 @@ import Login from "@/components/Login";
 import SignOut from "@/components/SignOut";
 import {
   newTodo,
-  TodoItem,
   getAllData,
   removeTodoItem,
   removeTodo,
   updateTodo,
-} from "@/firebase";
+} from "@/db";
 import { useEffect, useState } from "react";
+import {  TodoItem,TodoItemChildren} from "@/types";
 
 export default function Home() {
   const [data, setData] = useState<TodoItem[]>([]);
@@ -34,12 +34,11 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    console.log("data güncellendi:", data);
     if (data.length > 0) {
       //removeTodo(data[0].id)
       const payload: TodoItem = {
         id: data[0].id,
-        title: "this has been changed",
+        title: "this has been changed2s",
         completed: true,
         children: [
           { text: "Ekmek al", completed: false },
@@ -51,6 +50,7 @@ export default function Home() {
         ],
       };
       updateTodo(data[0].id, payload);
+      console.log("data güncellendi:", data);
     }
   }, [data]);
 
